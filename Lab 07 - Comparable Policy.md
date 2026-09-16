@@ -1,11 +1,5 @@
 # Lab 07 - Comparable-Company Policy and Implied Range
 
-## Reopen and explain
-
-My Week 3 FCFF valuation is especially sensitive to WACC and terminal growth. The question I wanted to investigate is: **How can a peer P/E comparison serve as an independent market check without being mixed with the FCFF enterprise-value-to-equity bridge?**
-
-P/E is an equity-value comparison, so cash and debt are not added or subtracted from a P/E-implied share price. A difference between a DCF and a comparable-company result is a reason to investigate the forecast, earnings basis, peer policy, and market conditions; it is not a reason to average the two values automatically.
-
 ## Define/Discover: what P/E means
 
 P/E equals price per share divided by annual diluted earnings per share (EPS). Price per share is the market price of one common share at the chosen date, and diluted EPS is annual earnings allocated across diluted shares. The result is the price investors are paying for one dollar of annual earnings.
@@ -75,6 +69,8 @@ The result falls because the remaining AN multiple is lower than the original tw
 ## Reflection
 
 P/E compares the market price paid for each dollar of annual earnings. AutoNation is included because it fits the core franchised vehicle-retail and service/parts policy, while Group 1 is included with an explicit geography and acquisition qualification. The ABG peer-implied range is a conditional comparison, not proof that ABG is fairly valued or an investment recommendation. It depends on the selected peers, the total GAAP diluted-EPS convention, and whether the stated business differences justify the observed multiples.
+
+This is not financial advice
 
 ## Course sources
 
