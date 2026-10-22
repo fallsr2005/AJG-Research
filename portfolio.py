@@ -1,6 +1,10 @@
 """Price three Meridian baselines using editable annual training assumptions."""
 
+import csv
+import io
+from datetime import date
 from math import isfinite, sqrt
+from statistics import mean, stdev
 
 # Rates and weights are decimals: 0.035 means 3.5%.
 SLEEVES = {
@@ -79,6 +83,95 @@ def reserve_weight(weights, reserve_sleeves):
 
 def meets_objective(portfolio_return, objective):
     return portfolio_return >= objective
+
+
+def search_portfolio(sleeves, correlations, objective, reserve_sleeves, minimum_reserve):
+    """Search all 5-percentage-point long-only portfolios; return None if infeasible."""
+    if not 0 <= minimum_reserve <= 1:
+        raise ValueError("Reserve minimum must be between 0% and 100%.")
+    names = list(sleeves)
+    if not names:
+        raise ValueError("At least one asset is required.")
+    covariance = covariance_matrix(sleeves, correlations)
+    best = None
+
+    def compositions(total, count):
+        if count == 1:
+            yield (total,)
+        else:
+            for part in range(total + 1):
+                for rest in compositions(total - part, count - 1):
+                    yield (part,) + rest
+
+    for units in compositions(20, len(names)):
+        weights = {name: unit / 20 for name, unit in zip(names, units)}
+        result = expected_return(weights, sleeves)
+        reserve = reserve_weight(weights, reserve_sleeves)
+        if result + 1e-12 < objective or reserve + 1e-12 < minimum_reserve:
+            continue
+        volatility = portfolio_volatility(weights, sleeves, covariance)
+        if best is None or volatility < best["volatility"] - 1e-12:
+            best = {"weights": weights, "return": result,
+                    "volatility": volatility, "reserve": reserve}
+    return best
+
+
+def estimate_from_csv(source, last_36=False):
+    """Annualize monthly simple returns; last_36 uses 36 returns and 37 prices."""
+    raw = source.read() if hasattr(source, "read") else source
+    if isinstance(raw, bytes):
+        raw = raw.decode("utf-8-sig")
+    reader = csv.reader(io.StringIO(raw))
+    rows = list(reader)
+    if not rows or len(rows[0]) < 2 or rows[0][0].strip().lower() != "date":
+        raise ValueError("CSV must start with a date column followed by ticker columns.")
+    names = [name.strip() for name in rows[0][1:]]
+    if not 3 <= len(names) <= 6 or any(not n for n in names) or len(set(names)) != len(names):
+        raise ValueError("CSV must have 3 to 6 unique, nonempty ticker columns.")
+    dates, prices = [], []
+    for row in rows[1:]:
+        if not row or all(not cell.strip() for cell in row):
+            continue
+        if len(row) != len(names) + 1:
+            raise ValueError("Each CSV row must contain a date and one price per ticker.")
+        try:
+            day = date.fromisoformat(row[0].strip())
+            values = [float(value) for value in row[1:]]
+        except ValueError as exc:
+            raise ValueError("Dates must be YYYY-MM-DD and prices must be numeric.") from exc
+        if any(not isfinite(value) or value <= 0 for value in values):
+            raise ValueError("Prices must be positive and finite.")
+        if dates and (day.year * 12 + day.month != dates[-1].year * 12 + dates[-1].month + 1):
+            raise ValueError("Prices must be in consecutive months, oldest first.")
+        dates.append(day)
+        prices.append(values)
+    if len(prices) < 3:
+        raise ValueError("At least three monthly prices are needed.")
+    returns = [[prices[i][j] / prices[i - 1][j] - 1
+                for i in range(1, len(prices))] for j in range(len(names))]
+    if last_36:
+        if len(prices) < 37:
+            raise ValueError("The last 36 months require at least 37 monthly prices.")
+        returns = [series[-36:] for series in returns]
+    averages = [mean(series) for series in returns]
+    deviations = [stdev(series) for series in returns]
+    if any(sd <= 0 for sd in deviations):
+        raise ValueError("Each asset must have nonzero historical volatility.")
+    correlations = []
+    for i in range(len(names)):
+        row = []
+        for j in range(len(names)):
+            if i == j:
+                row.append(1.0)
+            else:
+                covariance = sum((a - averages[i]) * (b - averages[j])
+                                 for a, b in zip(returns[i], returns[j])) / (len(returns[i]) - 1)
+                row.append(max(-1.0, min(1.0, covariance / (deviations[i] * deviations[j]))))
+        correlations.append(row)
+    sleeves = {name: {"return": averages[i] * 12,
+                      "volatility": deviations[i] * sqrt(12)}
+               for i, name in enumerate(names)}
+    return sleeves, correlations, len(returns[0])
 
 
 def main():

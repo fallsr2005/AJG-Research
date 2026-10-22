@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="920" height="850" viewBox="0 0 920 850" role="img" aria-labelledby="title desc">
+  <title id="title">Portfolio engine flow</title>
+  <desc id="desc">Monthly price data is converted into estimates. Meridian assumptions and estimated data feed the covariance calculation, grid search, constraint filter, and lowest volatility result.</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#53718d"/></marker>
+    <style>text{font-family:Arial,sans-serif;fill:#17324d}.heading{font-size:27px;font-weight:700}.label{font-size:18px;font-weight:700}.detail{font-size:15px}.box{fill:#edf4fb;stroke:#a5bdd4;stroke-width:2}.line{fill:none;stroke:#53718d;stroke-width:2.5;marker-end:url(#arrow)}</style>
+  </defs>
+  <rect width="920" height="850" fill="#fff"/>
+  <text class="heading" x="40" y="48">Portfolio engine: inputs to decision</text>
+  <rect class="box" x="40" y="75" rx="12" width="390" height="85"/>
+  <text class="label" x="60" y="108">Project 2: monthly prices CSV</text><text class="detail" x="60" y="135">Validate dates and positive adjusted prices</text>
+  <rect class="box" x="490" y="75" rx="12" width="390" height="85"/>
+  <text class="label" x="510" y="108">Meridian training inputs</text><text class="detail" x="510" y="135">Returns, volatilities and correlations</text>
+  <path class="line" d="M235 160 V195"/>
+  <rect class="box" x="40" y="195" rx="12" width="390" height="95"/>
+  <text class="label" x="60" y="228">Estimate from monthly returns</text><text class="detail" x="60" y="254">Use all returns or the last 36; annualize</text><text class="detail" x="60" y="275">mean and volatility; calculate correlations</text>
+  <path class="line" d="M235 290 V330 H460"/><path class="line" d="M685 160 V330 H460"/>
+  <rect class="box" x="215" y="330" rx="12" width="490" height="72"/>
+  <text class="label" x="235" y="360">Build the covariance matrix</text><text class="detail" x="235" y="384">Correlation × volatility i × volatility j</text>
+  <path class="line" d="M460 402 V435"/>
+  <rect class="box" x="215" y="435" rx="12" width="490" height="72"/>
+  <text class="label" x="235" y="465">Search 5-point weight combinations</text><text class="detail" x="235" y="489">Long-only weights add to 100%</text>
+  <path class="line" d="M460 507 V540"/>
+  <rect class="box" x="215" y="540" rx="12" width="490" height="72"/>
+  <text class="label" x="235" y="570">Check the mandate</text><text class="detail" x="235" y="594">Keep mixes meeting the return and reserve thresholds</text>
+  <path class="line" d="M460 612 V645"/>
+  <rect class="box" x="215" y="645" rx="12" width="490" height="72"/>
+  <text class="label" x="235" y="675">Choose the lowest-volatility feasible mix</text><text class="detail" x="235" y="699">Use the covariance matrix to calculate risk</text>
+  <path class="line" d="M460 717 V750"/>
+  <rect class="box" x="215" y="750" rx="12" width="490" height="72"/>
+  <text class="label" x="235" y="780">Display results or no feasible mix</text><text class="detail" x="235" y="804">Show weights, return, volatility and reserve</text>
+</svg>
