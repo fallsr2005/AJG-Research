@@ -1,0 +1,245 @@
+{
+  "ticker": "JPM",
+  "company_name": "JPMORGAN CHASE & CO",
+  "cik": "0000019617",
+  "source_urls": {
+    "tickers": "https://www.sec.gov/files/company_tickers.json",
+    "facts": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000019617.json"
+  },
+  "units": "USD millions in display; source facts are USD",
+  "rows": [
+    {
+      "fiscal_year_end": "2021-12-31",
+      "revenue": {
+        "value": 121649000000,
+        "tag": "Revenues",
+        "filed": "2024-02-16"
+      },
+      "net_income": {
+        "value": 48334000000,
+        "tag": "NetIncomeLoss",
+        "filed": "2024-02-16"
+      },
+      "operating_cash_flow": {
+        "value": 78084000000,
+        "tag": "NetCashProvidedByUsedInOperatingActivities",
+        "filed": "2024-02-16"
+      },
+      "capital_spending": {
+        "value": null,
+        "tag": "not found",
+        "filed": null
+      },
+      "equity": {
+        "value": 294127000000,
+        "tag": "StockholdersEquity",
+        "filed": "2024-02-16"
+      },
+      "liabilities": {
+        "value": 3449440000000,
+        "tag": "Liabilities",
+        "filed": "2023-02-21"
+      },
+      "roe": 0.16433037429409744,
+      "owner_earnings": null,
+      "liabilities_to_equity": 11.727723058406742
+    },
+    {
+      "fiscal_year_end": "2022-12-31",
+      "revenue": {
+        "value": 128695000000,
+        "tag": "Revenues",
+        "filed": "2025-02-14"
+      },
+      "net_income": {
+        "value": 37676000000,
+        "tag": "NetIncomeLoss",
+        "filed": "2025-02-14"
+      },
+      "operating_cash_flow": {
+        "value": 107119000000,
+        "tag": "NetCashProvidedByUsedInOperatingActivities",
+        "filed": "2025-02-14"
+      },
+      "capital_spending": {
+        "value": null,
+        "tag": "not found",
+        "filed": null
+      },
+      "equity": {
+        "value": 292332000000,
+        "tag": "StockholdersEquity",
+        "filed": "2025-02-14"
+      },
+      "liabilities": {
+        "value": 3373411000000,
+        "tag": "Liabilities",
+        "filed": "2024-02-16"
+      },
+      "roe": 0.12888086148625535,
+      "owner_earnings": null,
+      "liabilities_to_equity": 11.539656965368144
+    },
+    {
+      "fiscal_year_end": "2023-12-31",
+      "revenue": {
+        "value": 158104000000,
+        "tag": "Revenues",
+        "filed": "2026-02-13"
+      },
+      "net_income": {
+        "value": 49552000000,
+        "tag": "NetIncomeLoss",
+        "filed": "2026-02-13"
+      },
+      "operating_cash_flow": {
+        "value": 12974000000,
+        "tag": "NetCashProvidedByUsedInOperatingActivities",
+        "filed": "2026-02-13"
+      },
+      "capital_spending": {
+        "value": null,
+        "tag": "not found",
+        "filed": null
+      },
+      "equity": {
+        "value": 327878000000,
+        "tag": "StockholdersEquity",
+        "filed": "2026-02-13"
+      },
+      "liabilities": {
+        "value": 3547515000000,
+        "tag": "Liabilities",
+        "filed": "2025-02-14"
+      },
+      "roe": 0.15112938349020064,
+      "owner_earnings": null,
+      "liabilities_to_equity": 10.819618882633174
+    },
+    {
+      "fiscal_year_end": "2024-12-31",
+      "revenue": {
+        "value": 177556000000,
+        "tag": "Revenues",
+        "filed": "2026-02-13"
+      },
+      "net_income": {
+        "value": 58471000000,
+        "tag": "NetIncomeLoss",
+        "filed": "2026-02-13"
+      },
+      "operating_cash_flow": {
+        "value": -42012000000,
+        "tag": "NetCashProvidedByUsedInOperatingActivities",
+        "filed": "2026-02-13"
+      },
+      "capital_spending": {
+        "value": null,
+        "tag": "not found",
+        "filed": null
+      },
+      "equity": {
+        "value": 344758000000,
+        "tag": "StockholdersEquity",
+        "filed": "2026-02-13"
+      },
+      "liabilities": {
+        "value": 3658056000000,
+        "tag": "Liabilities",
+        "filed": "2026-02-13"
+      },
+      "roe": 0.16960012530528662,
+      "owner_earnings": null,
+      "liabilities_to_equity": 10.610503599626405
+    },
+    {
+      "fiscal_year_end": "2025-12-31",
+      "revenue": {
+        "value": 182447000000,
+        "tag": "Revenues",
+        "filed": "2026-02-13"
+      },
+      "net_income": {
+        "value": 57048000000,
+        "tag": "NetIncomeLoss",
+        "filed": "2026-02-13"
+      },
+      "operating_cash_flow": {
+        "value": -147782000000,
+        "tag": "NetCashProvidedByUsedInOperatingActivities",
+        "filed": "2026-02-13"
+      },
+      "capital_spending": {
+        "value": null,
+        "tag": "not found",
+        "filed": null
+      },
+      "equity": {
+        "value": 362438000000,
+        "tag": "StockholdersEquity",
+        "filed": "2026-02-13"
+      },
+      "liabilities": {
+        "value": 4062462000000,
+        "tag": "Liabilities",
+        "filed": "2026-02-13"
+      },
+      "roe": 0.1574007140531622,
+      "owner_earnings": null,
+      "liabilities_to_equity": 11.208708799849905
+    }
+  ],
+  "checks": {
+    "roe_15_or_more_every_year": "fail",
+    "owner_earnings_positive_every_year": "not known",
+    "owner_earnings_grew_first_to_last": "not known"
+  },
+  "printed_numbers": [
+    "-147782",
+    "-42012",
+    "10",
+    "1061.1",
+    "107119",
+    "1082.0",
+    "1120.9",
+    "1154.0",
+    "1172.8",
+    "12",
+    "12.9",
+    "121649",
+    "128695",
+    "12974",
+    "15",
+    "15.0",
+    "15.1",
+    "15.7",
+    "158104",
+    "16.4",
+    "17.0",
+    "177556",
+    "182447",
+    "2021",
+    "2022",
+    "2023",
+    "2024",
+    "2025",
+    "292332",
+    "294127",
+    "31",
+    "327878",
+    "3373411",
+    "344758",
+    "3449440",
+    "3547515",
+    "362438",
+    "3658056",
+    "37676",
+    "4062462",
+    "48334",
+    "49552",
+    "5",
+    "57048",
+    "58471",
+    "78084"
+  ]
+}
