@@ -24,7 +24,12 @@ FLOW_TAGS = {
         "PaymentsToAcquireProductiveAssets",
     ],
 }
-INSTANT_TAGS = {"equity": ["StockholdersEquity"], "liabilities": ["Liabilities"]}
+INSTANT_TAGS = {
+    "equity": ["StockholdersEquity"],
+    "liabilities": ["Liabilities"],
+    "assets_current": ["AssetsCurrent"],
+    "liabilities_current": ["LiabilitiesCurrent"],
+}
 DISPLAY_NAMES = {
     "revenue": "Revenue",
     "net_income": "Net income",
@@ -152,20 +157,76 @@ def compute_checks(rows: list[dict]) -> dict:
     }
 
 
+def compute_panel_checks(rows: list[dict], graham_current_ratio_minimum: float = 2.0) -> dict:
+    """Compute Graham and Burry's fixed Lab 19 checks from the shared rows."""
+    latest = rows[-1]
+    current_ratio = latest["current_ratio"]
+    if current_ratio is None:
+        current_ratio_check = "not known"
+    else:
+        current_ratio_check = "pass" if current_ratio >= graham_current_ratio_minimum else "fail"
+
+    net_income_positive = check_all(rows, "net_income", lambda value: value > 0)
+    first_income, last_income = rows[0]["net_income"]["value"], rows[-1]["net_income"]["value"]
+    if first_income is None or last_income is None:
+        net_income_growth = "not known"
+    else:
+        net_income_growth = "pass" if last_income > first_income else "fail"
+
+    cash_covers_income = []
+    for row in rows:
+        cash = row["operating_cash_flow"]["value"]
+        income = row["net_income"]["value"]
+        if cash is None or income is None:
+            cash_covers_income.append(None)
+        else:
+            cash_covers_income.append(cash >= income)
+    operating_cash_flow_check = (
+        "not known" if any(value is None for value in cash_covers_income)
+        else "pass" if all(cash_covers_income) else "fail"
+    )
+
+    liabilities_to_equity = latest["liabilities_to_equity"]
+    if liabilities_to_equity is None:
+        leverage_check = "not known"
+    else:
+        leverage_check = "pass" if liabilities_to_equity <= 2 else "fail"
+
+    return {
+        "graham": {
+            "current_ratio_2_or_more_latest_year": current_ratio_check,
+            "net_income_positive_every_year": net_income_positive,
+            "net_income_grew_first_to_last": net_income_growth,
+        },
+        "burry": {
+            "operating_cash_flow_at_least_net_income_every_year": operating_cash_flow_check,
+            "liabilities_no_more_than_twice_equity_latest_year": leverage_check,
+        },
+    }
+
+
 def printed_number_strings(report: dict) -> list[str]:
     """Numbers the memo validator may accept because this script printed them."""
-    numbers = {"5", "10", "15", "15.0"}
+    numbers = {"2", "5", "10", "15", "15.0"}
     for row in report["rows"]:
         for part in row["fiscal_year_end"].split("-"):
             numbers.add(str(int(part)))
-        for field in ("revenue", "net_income", "operating_cash_flow", "capital_spending", "equity", "liabilities"):
+        for field in (
+            "revenue", "net_income", "operating_cash_flow", "capital_spending", "equity",
+            "liabilities", "assets_current", "liabilities_current",
+        ):
             value = row[field]["value"]
             if value is not None:
                 numbers.add(str(round(value / 1_000_000)))
-        for field in ("roe", "owner_earnings", "liabilities_to_equity"):
+        for field in ("roe", "owner_earnings", "liabilities_to_equity", "current_ratio"):
             value = row[field]
             if value is not None:
-                numbers.add(f"{value * 100:.1f}" if field != "owner_earnings" else str(round(value / 1_000_000)))
+                if field == "roe":
+                    numbers.add(f"{value * 100:.1f}")
+                elif field == "owner_earnings":
+                    numbers.add(str(round(value / 1_000_000)))
+                else:
+                    numbers.add(f"{value:.2f}")
     return sorted(numbers)
 
 
@@ -197,6 +258,9 @@ def build_year_row(facts: dict, fiscal_end: str) -> dict:
         row["operating_cash_flow"]["value"], row["capital_spending"]["value"]
     )
     row["liabilities_to_equity"] = ratio(row["liabilities"]["value"], row["equity"]["value"])
+    row["current_ratio"] = ratio(
+        row["assets_current"]["value"], row["liabilities_current"]["value"]
+    )
     return row
 
 
@@ -215,6 +279,7 @@ def build_report(ticker: str, user_agent: str) -> dict:
         "units": "USD millions in display; source facts are USD",
         "rows": rows,
         "checks": compute_checks(rows),
+        "panel_checks": compute_panel_checks(rows),
     }
     report["printed_numbers"] = printed_number_strings(report)
     return report
